@@ -1,0 +1,372 @@
+---
+title: "matches"
+output: html_document
+---
+
+```{r}
+library(shiny)
+library(tidyverse)
+library(plotly)
+library(shinythemes)
+library(igraph)
+library(ndtv)
+library(networkD3)
+```
+
+# Joining several datasources:
+
+We've scraped education program offers for several Belgian universites and linked them to skills in the python notebook attached to this project, here we bind all these data into one full dataset.
+
+```{r}
+skills <- read.csv('data/skills_en.csv')
+
+uant <- read.csv('data/UAntwerpen_skills.csv')
+
+ucl <- read.csv('data/UCL_skills.csv')
+
+ulie <- read.csv('data/Uliege_skills.csv', encoding = 'ISO-8859-1')
+
+vub <- read.csv('data/VUB_skills.csv')
+
+ep <- uant %>%
+  rbind(ucl) %>% 
+  rbind(ulie) %>% 
+  rbind(vub)
+
+ep <- ep %>% 
+  select(University,Program,skill,skill_uri_esco) %>% 
+  rename(skillUri = skill_uri_esco) 
+```
+
+Normally, in a normal graph contruction like an RDF contruction from CSV as would be done in open refine, having the URIs' for skills attached to each course in the above data would be enough, as we would upload on a same graph repository the other RDFs containing the links between skill URIs to occupation URIs to professional sector URIs to skill group URIs etc... Although here we want to create the graph from R and upload it to shinyapp so it is interactive. To do this we must explicitly create a row for every connection between a course and a skill and thus a skill and a profession as well. This increses the size of our dataframe quite considerably and shows that RDF format, the semantic web and other related subjects are also extremely more efficient in terms of data storage!
+
+In any case below you will find the joins that were to be made between the course to skill dataframes and skill to occupation dataframes.
+
+## Joining occupations to skill dataframe
+
+```{r}
+occ <- read.csv('data/occupations_en.csv')
+
+rel <- read.csv('data/occupationSkillRelations.csv')
+
+occ <- occ %>%
+  rename(occupationUri = conceptUri)
+rel2 <- rel %>% left_join(occ, by = "occupationUri")
+summary(is.na(rel2)) # small check to see how many connections were made. We attach all the occupations that are linked to skill according to ESCO.
+
+# Small verification to see how many times a skill appears in different occupations
+rel2 %>% 
+  group_by(skillUri) %>% 
+  count()
+```
+
+
+## Joining skill/occupation relations to education program/skill data frame
+
+We connect all skill URIs that are in common between the two data frames!
+
+```{r}
+ep2 <- ep %>% left_join(rel2, by = "skillUri")
+
+# some additionnal cleaning
+ep3 <- ep2 %>% 
+  select(-c(skillUri,occupationUri,conceptType,iscoGroup)) %>% 
+  rename(occupation = preferredLabel) %>% 
+  rename(job_description = description) %>% 
+  na.omit()
+summary(is.na(ep3)) # small check
+```
+
+# Formatting the data to graph-compatible:
+
+On one side we must create a dataframe with all the different nodes that we are considering (all different data points) and list them in a single column. In this dataframe we can add other columns which will contain node-only properties, anything related to the link it has with another node does not belong in that dataframe. Then we must create a link dataframe, which is exactly the same concept as the contruction of the dataframe to become a graph in igraph, namely that you have two columns where one row indicates a link between data points of the two columns. In that dataframe you may add properties of links, such as the matches by sector and courses in our case. 
+
+## Simple first graph
+
+Here we simply consider the links between education programs and occupation to be direct (although they are indirectly linked through skills) with a value indicating the number of times they were matches as an edge property (how many skills a program has in common with an occupation). 
+
+```{r}
+occ_prog_match <- ep3 %>% 
+              filter(Program != "") %>% 
+              filter(Program != "free elective") %>% 
+              group_by(occupation,Program) %>% 
+              summarize(Matches = n()) %>% 
+              filter(Matches > 5) %>%
+              arrange(desc(Matches,Program,occupation)) %>% 
+              select(Program,Matches)
+```
+
+## Graph for shiny
+
+We agreed upon keeping the inderect link that exists between an education program and an occupation, these links were thus added to the edge list.
+
+### For the edges
+
+```{r}
+# Matching between Programs and skills, and counting number of times a skill linked a program to a job implicitly through a course.
+occ_prog_matches <- ep3 %>% 
+  filter(Program != "") %>% 
+  filter(Program != "free elective") %>% 
+  group_by(Program,skill,occupation) %>% 
+  summarize(Matches = n()) %>% 
+  select(Program,skill,Matches) %>% 
+  distinct() %>% 
+  rename(from = Program,
+         to = skill) %>% 
+  select(from,to,Matches)
+
+# Matching between occupations and skills (from ESCO)
+occ_skill_match <- rel2 %>%
+  select(preferredLabel, skillUri) %>% 
+  rename(occupation = preferredLabel) %>% 
+  left_join(skills %>%
+              rename(skillUri = conceptUri,
+                     skill = preferredLabel),
+            by = "skillUri") %>% 
+  select(occupation,skill) 
+
+# Appending a match property for occupations (number of skills attached to each occupation!)
+occ_skill_matches <- occ_skill_match %>% 
+  left_join(occ_skill_match %>% 
+  group_by(occupation) %>%
+  summarize(Matches = n()), by = "occupation") %>% 
+  rename(from = skill,
+         to = occupation) %>% 
+  select(from,to,Matches)
+```
+
+### For the nodes
+
+Adding all the unique names of education programs, skills and occupations to identify the nodes of our graph
+
+```{r}
+## Occupation nodes:
+
+sect <- read.csv('data/ISCOGroups_en.csv')
+occupations <- data.frame(name = unique(occ_skill_matches$to), type = "Profession")
+sect <- sect %>%
+  select(iscoGroup, preferredLabel) %>% 
+  rename(type = preferredLabel)
+occ_sect <- occ %>%
+  left_join(sect, by = "iscoGroup") %>% # We add a node property to occuaption nodes: the professional sector to which they are attached
+  select(preferredLabel,type) %>% 
+  rename(name = preferredLabel) %>%
+  filter(name %in% occupations$name) %>% 
+  distinct()
+
+# Skill nodes
+
+skills <- data.frame(name = unique(occ_skill_matches$from), type = "skill") # node prooperty will only be skill as there are no other real interesting alternatives
+
+# Program nodes
+
+programss <- data.frame(Program = unique(occ_prog_matches$from))
+programs <- ep3 %>% 
+  filter(Program %in% unique(occ_prog_matches$from)) %>% 
+  select(Program, University) %>% 
+  rename(name = Program, type = University) %>% 
+  distinct()
+
+# Finally our node data
+
+nodes <- occ_sect %>% 
+  rbind(skills) %>% 
+  rbind(programs)
+
+# Defining the relations between the nodes we have identified : skill -> occupation ; program -> skill
+
+from1 <- data.frame(from = occ_skill_matches$from)
+from2 <- data.frame(from = occ_prog_matches$from)
+from3 <- from1 %>% rbind(from2)
+
+to1 <- data.frame(to = occ_skill_matches$to)
+to2 <- data.frame(to = occ_prog_matches$to)
+to3 <- to1 %>% rbind(to2)
+
+matches1 <- data.frame(Matches = occ_skill_matches$Matches)
+matches2 <- data.frame(Matches = occ_prog_matches$Matches)
+matches3 <- matches1 %>% rbind(matches2)
+
+# Finally defining full edge and node list
+links <- data.frame(from = from3, to = to3, matches = matches3) %>% 
+  mutate_all(as.character)
+
+nodes <- nodes %>% 
+  mutate_all(as.character) %>% 
+  rename(group = type)
+
+# We record them to not have to go through this process again
+#write.csv(links,'data/links_2.csv', row.names = FALSE)
+#write.csv(nodes,'data/nodes_2.csv', row.names = FALSE)
+```
+
+# Graph contruction:
+
+Loading the edge and node data
+
+```{r}
+## Loading complete node/edge lists
+
+edgeList <- read.csv('data/links_1.csv')
+nodeList <- read.csv('data/nodes_1.csv')
+ep
+
+levels(as.factor(nodeList$group))
+```
+
+For the shinyapp we considered two perspectives, either you chooe a job and see how they link to education programs through skills or the inverse, here the graph contructions and visualizations for both perspectives seperately:
+
+## Professional perspective
+
+```{r}
+# Choosing one occupation
+filtered_occupation <- edgeList %>% 
+  filter(to == "technical director")
+
+# Retrieving all the programs yielding the skills defined above
+filtered_programs <- edgeList %>% 
+  filter(to %in% as.character(filtered_occupation$from))
+
+# Binding above rows to define filtered edge list
+filtered_edgeList <- filtered_occupation %>% 
+  rbind(filtered_programs)
+  
+## Defining filtered nodes
+
+# Given edge list defined above, retrieve all the node names accordingly
+filtered_nodeList <- nodeList %>% 
+  filter(
+    name %in% unique(filtered_edgeList$from) |
+    name %in% unique(filtered_edgeList$to)
+    )
+
+# Creating indexes for the node names
+filtered_nodeList <- filtered_nodeList %>% 
+  cbind(c(seq(1,nrow(filtered_nodeList)) - 1)) 
+
+# Naming columns appropriately
+names(filtered_nodeList) <- c("name","group","nodeID")
+
+# Re-defining indices of edges for the network
+filtered_edgeList$from.index = match(filtered_edgeList$from,
+                                     filtered_nodeList$name)-1
+filtered_edgeList$to.index = match(filtered_edgeList$to,
+                                   filtered_nodeList$name)-1
+
+# Defining a click script
+MyClickScript <- 'd3.select(this).select("circle").transition().duration(750).attr("r", 40)'
+
+## Finally, creating the network
+
+forceNetwork(Links = filtered_edgeList,
+             Nodes = filtered_nodeList,
+             Source = "from.index",
+             Target = "to.index",
+             Value = "Matches",
+             NodeID = "name",
+             #Nodesize = "group",
+             Group = "group",
+             linkDistance = 200,
+             fontSize = 20,
+             opacity = 0.8,
+             zoom = TRUE,
+             linkColour = "#afafaf",
+             linkWidth = networkD3::JS("function(d) { return d.value/5; }"),
+             legend = T,
+             clickAction = MyClickScript)
+
+# edgeList %>% 
+#   arrange(Matches) %>% 
+#   filter(Matches == 15)
+```
+
+## Education perspective
+
+```{r}
+# Choosing one education program
+filtered_programs <- edgeList %>% 
+  filter(from == "Master [120] in Business Engineering") %>% 
+  top_n(50)
+
+# Retrieving all the programs yielding the skills defined above
+filtered_occupation <- edgeList %>% 
+  filter(from %in% as.character(filtered_programs$to)) %>% 
+  top_n(50)
+
+# Binding above rows to define filtered edge list
+filtered_edgeList <- filtered_occupation %>% 
+  rbind(filtered_programs)
+  
+## Defining filtered nodes
+
+# Given edge list defined above, retrieve all the node names accordingly
+filtered_nodeList <- nodeList %>% 
+  filter(
+    name %in% unique(filtered_edgeList$from) |
+    name %in% unique(filtered_edgeList$to)
+    )
+
+# Creating indexes for the node names
+filtered_nodeList <- filtered_nodeList %>% 
+  cbind(c(seq(1,nrow(filtered_nodeList)) - 1)) 
+
+# Naming columns appropriately
+names(filtered_nodeList) <- c("name","group","nodeID")
+
+# Re-defining indices of edges for the network
+filtered_edgeList$from.index = match(filtered_edgeList$from,
+                                     filtered_nodeList$name)-1
+filtered_edgeList$to.index = match(filtered_edgeList$to,
+                                   filtered_nodeList$name)-1
+
+# Defining a click script
+MyClickScript <- 'd3.select(this).select("circle").transition().duration(750).attr("r", 40)'
+
+## Finally, creating the network
+
+forceNetwork(Links = filtered_edgeList,
+             Nodes = filtered_nodeList,
+             Source = "from.index",
+             Target = "to.index",
+             Value = "Matches",
+             NodeID = "name",
+             #Nodesize = "group",
+             Group = "group",
+             linkDistance = 200,
+             fontSize = 20,
+             opacity = 0.8,
+             zoom = TRUE,
+             linkColour = "#afafaf",
+             linkWidth = networkD3::JS("function(d) { return d.value/5; }"),
+             legend = T,
+             clickAction = MyClickScript)
+```
+
+Now that the graph contruction and visualization is set, we just need to change the code so it's shiny compatible and create the shinyapp!
+
+
+```{r}
+full_links <- ep3 %>% 
+  select(Program, skill, occupation, relationType, skillType)
+
+# full_links %>% 
+#   group_by(occupation) %>% 
+#   mutate(job_skills = n()) %>% 
+#   ungroup() %>% 
+#   group_by(Program, occupation) %>% 
+#   mutate(common_skills = n()) %>% 
+#   mutate(link_ratio = common_skills/job_skills) %>% 
+#   ggplot() +
+#   aes(x = Program, y = link_ratio, color = occupation) + 
+#   geom_point()
+```
+
+
+
+
+
+
+
+
+
+

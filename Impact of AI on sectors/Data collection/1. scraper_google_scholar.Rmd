@@ -1,0 +1,109 @@
+---
+title: "google_scholar_scraping"
+output: html_document
+---
+
+# This script was designed to scrape article information from google scholar using the rvest package.
+
+```{r}
+library(tidyverse)
+library(rvest)
+library(httr)
+```
+
+The constrution of google scholar's url's for advanced search is pretty straightforward and simple. The url always start by "https://scholar.google.be/scholar?start=" followed by a number increasing in increments of 10 to indicate the page on which you are and followed by the advanced search conditions you chose. Given this, retrieving the information was very easy. A condition "Contains at least one of the words" is given by %22+OR+%22 followed by your term, for specific journal it is specified by %2C+. If your term contains a space it is replaced by a +. We thus just glue two strings and a number increasing by increments of 1° until the last page number times 10 and retrieve the nodes "h3.gs_rt, div.gs_rs" which correspond to to the title and abstract of each articles yielded by the refined search. Google blocks you after 400 items retrieved despite a sleeping bot added to the code.
+Each page scraped is then appended to an initialized dataframe with the first page of the same refined search and written to csv. 
+
+```{r}
+titlee <- read_html("https://scholar.google.be/scholar?hl=en&as_sdt=0%2C5&as_ylo=2017&q=allintitle%3A+real+estate++%22Artificial+Intelligence%22+OR+%22Big+Data%22+OR+%22Machine+Learning%22+OR+%22Supervised+Learning%22+OR+%22Unsupervised+Learning%22+OR+%22Semi+Supervised+Learning%22+OR+%22Recursive+Learning%22+OR+Automation&btnG=") %>% html_nodes("h3.gs_rt, div.gs_rs")  %>% html_text() 
+
+abstract_index <- seq(2,20,2)
+title_index <- seq(1,19,2)
+titles <- titlee[title_index]
+abstracts <- titlee[abstract_index]
+
+
+gs2 <- data.frame(Titles = titles, Abstracts = abstracts)
+
+for(i in 1:3){
+  url_part1 <- "https://scholar.google.be/scholar?start="
+  page_results <- i * 10
+  url_part2 <- "Legal+and+accounting+activities&as_epq=&as_oq=%22Artificial+Intelligence%22+%22Big+Data%22+%22Machine+Learning%22+%22Supervised+Learning%22+%22Unsupervised+Learning%22+%22Semi-Supervised+Learning%22+%22Recursive+Learning%22+%22Automation%22+%22Algorithm%22+%22Statistics%22+%22Knowledge+representation%22+%22Bayesian+analysis%22++%22Clustering%22+%22Regression%22+%22Classification%22+%22Multivariate+Analysis%22+%22Natural+Language+Processing%22+%22Hypothesis+Testing%22+%22Prediction%22+%27Estimation%22&as_eq=&as_occt=any&as_sauthors=&as_publication=BRQ+Business+Research+QuarterlyOpen+Access%2C+Journal+of+Theoretical+and+Applied+Electronic+Commerce+Research%2C+Serbian+Journal+of+Management%2C+Journal+of+Intelligence+Studies+in+Business%2C+Australasian+Journal+of+Information+Systems%2C+South+East+European+Journal+of+Economics+and+Business%2C+IIMB+Management+Review%2C+Australasian+Accounting%2C+Business+and+Finance+Journal%2C+Revista+de+Contabilidad%2C+China+Journal+of+Accounting+Research&as_ylo=2017&as_yhi=&hl=en&as_sdt=0%2C5"
+  URL <- paste(url_part1,page_results,url_part2,sep="")
+  page <- read_html(URL) %>%
+  html_nodes("h3.gs_rt, div.gs_rs") %>%
+  html_text() 
+
+  title <- page[title_index]
+  abstract <- page[abstract_index]
+  gs <- data.frame(Titles = title, Abstracts = abstract)
+  gs2 <- gs2 %>% rbind(gs)
+  Sys.sleep(20)
+}
+#write.csv(gs2,'gs_articles_real_estate.csv',row.names = FALSE)
+```
+
+# Binding the sectors
+
+Given that we had the sectors we chose confirmed sequentially they were recorded seperately by sector. The following code is to join them in one unique dataframe.
+
+```{r}
+food <- read.csv('gs_articles_AI_food_&_accomodation.csv')
+legal <- read.csv('gs_articles_AI_law_&_accounting.csv')
+social <- read.csv('gs_articles_AI_social_work.csv')
+agriculture <- read.csv('gs_articles_Agriculture_forestry_fishing.csv')
+art <- read.csv('gs_articles_arts_entertainment.csv')
+electricity <- read.csv('gs_articles_electricity_gas_airconditioning.csv')
+finance <- read.csv('gs_articles_financial_services.csv')
+public <- read.csv('gs_articles_public_administration_defence_social_security.csv')
+housing <- read.csv('gs_articles_real_estate.csv')
+water <- read.csv('gs_articles_water_supply_waste_management.csv')
+
+legal <- legal %>% 
+  mutate(Sector = "Legal and accounting activities") %>% 
+  select(Titles,Abstracts,Sector)
+food <- food %>% 
+  mutate(Sector = "Accomodation and food service activities") %>% 
+  select(Titles,Abstracts,Sector)
+social <- social %>% 
+  mutate(Sector = "Human health and social work activities") %>% 
+  select(Titles,Abstracts,Sector)
+agriculture <- agriculture %>% 
+  mutate(Sector = "Agriculture, forestry and fishing") %>% 
+  select(Titles,Abstracts,Sector)
+art <- art %>% 
+  mutate(Sector = "Arts, entertainment and recreation") %>% 
+  select(Titles,Abstracts,Sector)
+electricity <- electricity %>% 
+  mutate(Sector = "Electricity, gas, steam and air conditioning supply") %>% 
+  select(Titles,Abstracts,Sector)
+finance <- finance %>% 
+  mutate(Sector = "Financial service activities, except insurance and pension funding") %>% 
+  select(Titles,Abstracts,Sector)
+public <- public %>% 
+  mutate(Sector = "Public administration and defence, compulsory social security") %>% 
+  select(Titles,Abstracts,Sector)
+water <- water %>% 
+  mutate(Sector = "Water supply, sewerage, waste management and remediation activities") %>% 
+  select(Titles,Abstracts,Sector)
+housing <- housing %>% 
+  mutate(Sector = "Real estate activities") %>% 
+  select(Titles,Abstracts,Sector)
+
+
+gs <- legal %>% 
+  rbind(food) %>% 
+  rbind(social) %>% 
+  rbind(agriculture) %>% 
+  rbind(art) %>% 
+  rbind(electricity) %>% 
+  rbind(finance) %>% 
+  rbind(public) %>% 
+  rbind(water) %>% 
+  rbind(housing) %>% 
+  na.omit()
+
+#write.csv(gs, 'google_scholar_articles_full.csv', row.names = FALSE)
+```
+
+This file is then passed to the python notebook NLP_course_extraction.ipynb.

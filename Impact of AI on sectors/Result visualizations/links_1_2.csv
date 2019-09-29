@@ -1,0 +1,337 @@
+"from","to","Matches"
+"Accomodation and food service activities","A Network Tour of Data Science",7
+"Accomodation and food service activities","Apllied Computational Intelligence",1
+"Accomodation and food service activities","Applied data analysis",24
+"Accomodation and food service activities","Artificial Intelligence and Data Science",9
+"Accomodation and food service activities","Autonomous Robots",1
+"Accomodation and food service activities","Bid Data Measuring Systems",6
+"Accomodation and food service activities","Big Data",21
+"Accomodation and food service activities","Biomedical Informatics",2
+"Accomodation and food service activities","Cloud Computing and Virtualization",1
+"Accomodation and food service activities","Computational Intelligence Lab",1
+"Accomodation and food service activities","Data Analysis and Integration",3
+"Accomodation and food service activities","Data Analystics for Smart Grids",9
+"Accomodation and food service activities","Data Mining",2
+"Accomodation and food service activities","Data visualization",2
+"Accomodation and food service activities","Database Systems",1
+"Accomodation and food service activities","Deep Learning",1
+"Accomodation and food service activities","Distributed information systems",1
+"Accomodation and food service activities","Energy-Efficient Parallel Computing Systems for Data Analytics",1
+"Accomodation and food service activities","Enterprise Integration",2
+"Accomodation and food service activities","High Performance Computing Systems",1
+"Accomodation and food service activities","Information Retrieval",11
+"Accomodation and food service activities","Information security and privacy",1
+"Accomodation and food service activities","Lab in data science",18
+"Accomodation and food service activities","Language Engineering",1
+"Accomodation and food service activities","Machine Learning",7
+"Accomodation and food service activities","Optimization for Data Science",4
+"Accomodation and food service activities","Probabilistic Artificial Intelligence",1
+"Accomodation and food service activities","Reliable and Interpretable Artificial Intelligence",1
+"Accomodation and food service activities","Statistical Modelling of Spatial Data",2
+"Accomodation and food service activities","Systems for data science",2
+"Accomodation and food service activities","Time Series Analysis",1
+"Agriculture, forestry and fishing","A Network Tour of Data Science",14
+"Agriculture, forestry and fishing","Applied biostatistics",2
+"Agriculture, forestry and fishing","Applied data analysis",28
+"Agriculture, forestry and fishing","Artificial Intelligence and Data Science",10
+"Agriculture, forestry and fishing","Bid Data Measuring Systems",4
+"Agriculture, forestry and fishing","Big Data",20
+"Agriculture, forestry and fishing","Bioinformatics",1
+"Agriculture, forestry and fishing","Biomedical Informatics",2
+"Agriculture, forestry and fishing","Computational Intelligence Lab",1
+"Agriculture, forestry and fishing","Data Analysis and Integration",8
+"Agriculture, forestry and fishing","Data Analystics for Smart Grids",17
+"Agriculture, forestry and fishing","Data Mining",5
+"Agriculture, forestry and fishing","Data visualization",4
+"Agriculture, forestry and fishing","DD2437 Artificial Neural Networks and Deep Architectures",1
+"Agriculture, forestry and fishing","Decision Support Models",1
+"Agriculture, forestry and fishing","Enterprise Integration",2
+"Agriculture, forestry and fishing","Information Retrieval",7
+"Agriculture, forestry and fishing","Information Security",1
+"Agriculture, forestry and fishing","Information Visualization",1
+"Agriculture, forestry and fishing","Lab in data science",27
+"Agriculture, forestry and fishing","Machine Learning",10
+"Agriculture, forestry and fishing","Mathematical foundations of signal processing",2
+"Agriculture, forestry and fishing","Mobile and Wireless Networks",1
+"Agriculture, forestry and fishing","Optimization for Data Science",2
+"Agriculture, forestry and fishing","Remote Sensing",1
+"Agriculture, forestry and fishing","Simulation Methods",1
+"Agriculture, forestry and fishing","Statistical Methods in Data Mining",3
+"Agriculture, forestry and fishing","Systems for data science",3
+"Agriculture, forestry and fishing","Time Series Analysis",1
+"Arts, entertainment and recreation","3D Vision",1
+"Arts, entertainment and recreation","Applications of Artificial Intelligence",1
+"Arts, entertainment and recreation","Autonomous Robots",1
+"Arts, entertainment and recreation","Bioinformatics",2
+"Arts, entertainment and recreation","Biomedical Informatics",1
+"Arts, entertainment and recreation","Computational Intelligence Lab",1
+"Arts, entertainment and recreation","Computer Vision",2
+"Arts, entertainment and recreation","DD2437 Artificial Neural Networks and Deep Architectures",1
+"Arts, entertainment and recreation","Deep Learning ",1
+"Arts, entertainment and recreation","Evolutionary Computing",1
+"Arts, entertainment and recreation","Human computer interaction",1
+"Arts, entertainment and recreation","Information Retrieval",1
+"Arts, entertainment and recreation","Intelligent Agents and Multi-Agent Systems",1
+"Arts, entertainment and recreation","Knowledge Representation",1
+"Arts, entertainment and recreation","Machine Learning",1
+"Arts, entertainment and recreation","Machine Perception",4
+"Arts, entertainment and recreation","Model Driven Engineering",1
+"Arts, entertainment and recreation","Natural Language",1
+"Arts, entertainment and recreation","Natural Language Processing",2
+"Arts, entertainment and recreation","Optimization for Data Science",2
+"Arts, entertainment and recreation","Optimization for machine learning",1
+"Arts, entertainment and recreation","Programming Paradigms",1
+"Arts, entertainment and recreation","Reliable and Interpretable Artificial Intelligence",3
+"Arts, entertainment and recreation","Research Methodology",1
+"Arts, entertainment and recreation","Simulation Methods",1
+"Arts, entertainment and recreation","Virtual reality",1
+"Electricity, gas, steam and air conditioning supply","A Network Tour of Data Science",9
+"Electricity, gas, steam and air conditioning supply","Applied biostatistics",1
+"Electricity, gas, steam and air conditioning supply","Applied data analysis",10
+"Electricity, gas, steam and air conditioning supply","Autonomous Robots",1
+"Electricity, gas, steam and air conditioning supply","Bid Data Measuring Systems",8
+"Electricity, gas, steam and air conditioning supply","Big Data",11
+"Electricity, gas, steam and air conditioning supply","Big Data, Law, and Policy",1
+"Electricity, gas, steam and air conditioning supply","Data Analysis and Integration",1
+"Electricity, gas, steam and air conditioning supply","Data Analystics for Smart Grids",16
+"Electricity, gas, steam and air conditioning supply","Database Systems",1
+"Electricity, gas, steam and air conditioning supply","DD2437 Artificial Neural Networks and Deep Architectures",4
+"Electricity, gas, steam and air conditioning supply","Decision Support Models",1
+"Electricity, gas, steam and air conditioning supply","Distributed Artificial Intelligence",1
+"Electricity, gas, steam and air conditioning supply","Energy-Efficient Parallel Computing Systems for Data Analytics",1
+"Electricity, gas, steam and air conditioning supply","Hardware Architectures for Machine Learning",1
+"Electricity, gas, steam and air conditioning supply","Lab in data science",8
+"Electricity, gas, steam and air conditioning supply","Learning theory",1
+"Electricity, gas, steam and air conditioning supply","Machine Learning",4
+"Electricity, gas, steam and air conditioning supply","Machine Perception",1
+"Electricity, gas, steam and air conditioning supply","Model Driven Engineering",1
+"Electricity, gas, steam and air conditioning supply","Network Science",2
+"Electricity, gas, steam and air conditioning supply","Numerical Methods for Partial Differential Equations",1
+"Electricity, gas, steam and air conditioning supply","Principles of Distributed Computing",1
+"Electricity, gas, steam and air conditioning supply","Probabilistic Artificial Intelligence",1
+"Electricity, gas, steam and air conditioning supply","Program Analysis for System Security and Reliability",1
+"Electricity, gas, steam and air conditioning supply","Reliable and Interpretable Artificial Intelligence",3
+"Electricity, gas, steam and air conditioning supply","Simulation Methods",1
+"Electricity, gas, steam and air conditioning supply","Statistical Learning Theory",4
+"Electricity, gas, steam and air conditioning supply","Statistical Modelling of Spatial Data",1
+"Electricity, gas, steam and air conditioning supply","Systems for data science",5
+"Electricity, gas, steam and air conditioning supply","Time Series Analysis",3
+"Financial service activities, except insurance and pension funding","A Network Tour of Data Science",8
+"Financial service activities, except insurance and pension funding","Advanced Topics in Machine Learning",2
+"Financial service activities, except insurance and pension funding","Applied data analysis",12
+"Financial service activities, except insurance and pension funding","Artificial Intelligence and Data Science",5
+"Financial service activities, except insurance and pension funding","Artificial Intelligence for Robotics",2
+"Financial service activities, except insurance and pension funding","Automated Planning",1
+"Financial service activities, except insurance and pension funding","Autonomous Robots",1
+"Financial service activities, except insurance and pension funding","Bayesian Networks",1
+"Financial service activities, except insurance and pension funding","Big Data",12
+"Financial service activities, except insurance and pension funding","Biomedical Informatics",1
+"Financial service activities, except insurance and pension funding","Computational Intelligence Lab",2
+"Financial service activities, except insurance and pension funding","Computer and network security",1
+"Financial service activities, except insurance and pension funding","Data Analysis and Integration",1
+"Financial service activities, except insurance and pension funding","Data Analystics for Smart Grids",9
+"Financial service activities, except insurance and pension funding","Data Mining",1
+"Financial service activities, except insurance and pension funding","DD2424 Deep Learning in Data Science",1
+"Financial service activities, except insurance and pension funding","DD2425 Robotics and Autonomous Systems",1
+"Financial service activities, except insurance and pension funding","DD2437 Artificial Neural Networks and Deep Architectures",4
+"Financial service activities, except insurance and pension funding","Decision Support Models",1
+"Financial service activities, except insurance and pension funding","Deep Learning",4
+"Financial service activities, except insurance and pension funding","Deep Learning ",5
+"Financial service activities, except insurance and pension funding","Hardware Architectures for Machine Learning",2
+"Financial service activities, except insurance and pension funding","Information Retrieval",6
+"Financial service activities, except insurance and pension funding","Information Security",2
+"Financial service activities, except insurance and pension funding","Information security and privacy",3
+"Financial service activities, except insurance and pension funding","Lab in data science",4
+"Financial service activities, except insurance and pension funding","Language Engineering",1
+"Financial service activities, except insurance and pension funding","Machine learning",2
+"Financial service activities, except insurance and pension funding","Machine Learning",15
+"Financial service activities, except insurance and pension funding","Machine Perception",1
+"Financial service activities, except insurance and pension funding","Model Driven Engineering",1
+"Financial service activities, except insurance and pension funding","Multivariate Statistics",1
+"Financial service activities, except insurance and pension funding","Network Science",1
+"Financial service activities, except insurance and pension funding","Optimization for Data Science",3
+"Financial service activities, except insurance and pension funding","Optimization for machine learning",1
+"Financial service activities, except insurance and pension funding","Programming Paradigms",1
+"Financial service activities, except insurance and pension funding","Reliable and Interpretable Artificial Intelligence",3
+"Financial service activities, except insurance and pension funding","Research Methodology",1
+"Financial service activities, except insurance and pension funding","Risk, rare events and extremes",1
+"Financial service activities, except insurance and pension funding","Simulation Methods",1
+"Financial service activities, except insurance and pension funding","Software security",1
+"Financial service activities, except insurance and pension funding","Statistical Learning Theory",1
+"Financial service activities, except insurance and pension funding","Statistical Methods in Data Mining",1
+"Financial service activities, except insurance and pension funding","Statistical Modelling of Spatial Data",1
+"Financial service activities, except insurance and pension funding","Statistical theory",1
+"Financial service activities, except insurance and pension funding","System Security",1
+"Financial service activities, except insurance and pension funding","Systems for data science",3
+"Financial service activities, except insurance and pension funding","Web Science",1
+"Human health and social work activities","3D Vision",1
+"Human health and social work activities","A Network Tour of Data Science",6
+"Human health and social work activities","Advanced Machine Learning",1
+"Human health and social work activities","Advanced Topics in Machine Learning",1
+"Human health and social work activities","Applied biostatistics",1
+"Human health and social work activities","Applied data analysis",17
+"Human health and social work activities","Artificial Intelligence and Data Science",13
+"Human health and social work activities","Artificial Intelligence for Robotics",1
+"Human health and social work activities","Automated Planning",1
+"Human health and social work activities","Autonomous Robots",1
+"Human health and social work activities","Bayesian Networks",3
+"Human health and social work activities","Bid Data Measuring Systems",2
+"Human health and social work activities","Big Data",11
+"Human health and social work activities","Big Data, Law, and Policy",3
+"Human health and social work activities","Bioinformatics",2
+"Human health and social work activities","Biomedical Informatics",2
+"Human health and social work activities","Computational Intelligence Lab",4
+"Human health and social work activities","Computational Statistics",1
+"Human health and social work activities","Computer vision",1
+"Human health and social work activities","Data Administration in Information Systems",1
+"Human health and social work activities","Data Analysis and Integration",2
+"Human health and social work activities","Data Analystics for Smart Grids",1
+"Human health and social work activities","Data Mining",1
+"Human health and social work activities","Data visualization",2
+"Human health and social work activities","DD2423 Image Analysis and Computer Vision",1
+"Human health and social work activities","DD2437 Artificial Neural Networks and Deep Architectures",16
+"Human health and social work activities","Decision Support Models",1
+"Human health and social work activities","Deep Learning",5
+"Human health and social work activities","Deep Learning ",3
+"Human health and social work activities","Distributed information systems",2
+"Human health and social work activities","Enterprise Integration",1
+"Human health and social work activities","Fairness, Explainability, and Accountability for ML",2
+"Human health and social work activities","Hardware Architectures for Machine Learning",1
+"Human health and social work activities","Information Retrieval",6
+"Human health and social work activities","Information Visualization",1
+"Human health and social work activities","Intelligent agents",1
+"Human health and social work activities","Intelligent Agents and Multi-Agent Systems",2
+"Human health and social work activities","Introduction to natural language processing",2
+"Human health and social work activities","Knowledge Representation",1
+"Human health and social work activities","Lab in data science",6
+"Human health and social work activities","Machine Learning",20
+"Human health and social work activities","Machine Perception",12
+"Human health and social work activities","Model Driven Engineering",3
+"Human health and social work activities","Natural Language Processing",1
+"Human health and social work activities","Network Science",1
+"Human health and social work activities","Ontological Engineering",1
+"Human health and social work activities","OPERATIONS RESEARCH",1
+"Human health and social work activities","Optimization for Data Science",3
+"Human health and social work activities","Optimization for machine learning",1
+"Human health and social work activities","Program Analysis for System Security and Reliability",1
+"Human health and social work activities","Reliable and Interpretable Artificial Intelligence",11
+"Human health and social work activities","Research Methodology",2
+"Human health and social work activities","Simulation Methods",1
+"Human health and social work activities","Statistical Methods in Data Mining",1
+"Human health and social work activities","Systems for data science",3
+"Human health and social work activities","Web Science",3
+"Legal and accounting activities","A Network Tour of Data Science",1
+"Legal and accounting activities","Applied data analysis",7
+"Legal and accounting activities","Artificial Intelligence and Data Science",3
+"Legal and accounting activities","Autonomous Robots",2
+"Legal and accounting activities","Bayesian Networks",1
+"Legal and accounting activities","Bid Data Measuring Systems",2
+"Legal and accounting activities","Big Data",8
+"Legal and accounting activities","Bioinformatics",1
+"Legal and accounting activities","Biomedical Informatics",4
+"Legal and accounting activities","Computational Intelligence Lab",1
+"Legal and accounting activities","Data Administration in Information Systems",1
+"Legal and accounting activities","Data Analysis and Integration",3
+"Legal and accounting activities","Data Analystics for Smart Grids",7
+"Legal and accounting activities","Data visualization",1
+"Legal and accounting activities","DD2437 Artificial Neural Networks and Deep Architectures",3
+"Legal and accounting activities","Deep Learning ",3
+"Legal and accounting activities","Enterprise Integration",2
+"Legal and accounting activities","Estimation and Testing under Sparsity",1
+"Legal and accounting activities","Evolutionary Computation",2
+"Legal and accounting activities","Information Retrieval",5
+"Legal and accounting activities","Information security and privacy",1
+"Legal and accounting activities","Intelligent Agents and Multi-Agent Systems",1
+"Legal and accounting activities","Introduction to natural language processing",1
+"Legal and accounting activities","Lab in data science",1
+"Legal and accounting activities","Language Engineering",2
+"Legal and accounting activities","Machine Learning",6
+"Legal and accounting activities","Network Science",1
+"Legal and accounting activities","Reliable and Interpretable Artificial Intelligence",4
+"Legal and accounting activities","Systems for data science",4
+"Legal and accounting activities","Web Science",1
+"Public administration and defence, compulsory social security","A Network Tour of Data Science",4
+"Public administration and defence, compulsory social security","Advanced Topics in Machine Learning",1
+"Public administration and defence, compulsory social security","Advanced topics on privacy enhancing technologies",1
+"Public administration and defence, compulsory social security","Applied data analysis",10
+"Public administration and defence, compulsory social security","Artificial Intelligence and Data Science",2
+"Public administration and defence, compulsory social security","Artificial neural networks",1
+"Public administration and defence, compulsory social security","Automated Planning",3
+"Public administration and defence, compulsory social security","Autonomous Robots",3
+"Public administration and defence, compulsory social security","Big Data",6
+"Public administration and defence, compulsory social security","Big Data, Law, and Policy",1
+"Public administration and defence, compulsory social security","Biomedical Informatics",5
+"Public administration and defence, compulsory social security","Computational Intelligence Lab",1
+"Public administration and defence, compulsory social security","Computer and network security",1
+"Public administration and defence, compulsory social security","Data Analysis and Integration",1
+"Public administration and defence, compulsory social security","Data Analystics for Smart Grids",4
+"Public administration and defence, compulsory social security","DD2424 Deep Learning in Data Science",1
+"Public administration and defence, compulsory social security","DD2437 Artificial Neural Networks and Deep Architectures",1
+"Public administration and defence, compulsory social security","Decision Support Models",2
+"Public administration and defence, compulsory social security","Decision Support Sytems",1
+"Public administration and defence, compulsory social security","Deep Learning",2
+"Public administration and defence, compulsory social security","Deep Learning ",3
+"Public administration and defence, compulsory social security","Distributed intelligent systems",1
+"Public administration and defence, compulsory social security","Evolutionary Computation",2
+"Public administration and defence, compulsory social security","Fairness, Explainability, and Accountability for ML",1
+"Public administration and defence, compulsory social security","How To Write Fast Numerical Code",1
+"Public administration and defence, compulsory social security","Information Retrieval",9
+"Public administration and defence, compulsory social security","Information Security",1
+"Public administration and defence, compulsory social security","Information security and privacy",5
+"Public administration and defence, compulsory social security","Intelligent agents",1
+"Public administration and defence, compulsory social security","Lab in data science",5
+"Public administration and defence, compulsory social security","Language Engineering",1
+"Public administration and defence, compulsory social security","Logistics Management and Operations",1
+"Public administration and defence, compulsory social security","Machine Learning",10
+"Public administration and defence, compulsory social security","Machine Perception",3
+"Public administration and defence, compulsory social security","Mobile and Wireless Networks",1
+"Public administration and defence, compulsory social security","Model Driven Engineering",2
+"Public administration and defence, compulsory social security","Optimization for Data Science",1
+"Public administration and defence, compulsory social security","Reliable and Interpretable Artificial Intelligence",6
+"Public administration and defence, compulsory social security","Simulation Methods",1
+"Public administration and defence, compulsory social security","System Security",1
+"Public administration and defence, compulsory social security","Topics in Networks and Distributed Systems",1
+"Public administration and defence, compulsory social security","Web Science",2
+"Real estate activities","A Network Tour of Data Science",3
+"Real estate activities","Advanced Algorithms",1
+"Real estate activities","Algorithmic Foundations of Data Science",1
+"Real estate activities","Applied data analysis",7
+"Real estate activities","Artificial Intelligence and Data Science",3
+"Real estate activities","Artificial Intelligence for Robotics",1
+"Real estate activities","Big Data",7
+"Real estate activities","Data Analystics for Smart Grids",2
+"Real estate activities","DD2437 Artificial Neural Networks and Deep Architectures",2
+"Real estate activities","Decision Support Sytems",1
+"Real estate activities","Deep Learning",1
+"Real estate activities","Deep Learning ",1
+"Real estate activities","Information Retrieval",1
+"Real estate activities","Lab in data science",6
+"Real estate activities","Language Engineering",1
+"Real estate activities","Machine learning",2
+"Real estate activities","Machine Learning",4
+"Real estate activities","Machine Perception",1
+"Real estate activities","Massively Parallel Algorithms",1
+"Real estate activities","Model Driven Engineering",1
+"Real estate activities","Probabilistic Artificial Intelligence",1
+"Real estate activities","Reliable and Interpretable Artificial Intelligence",4
+"Real estate activities","Risk, rare events and extremes",2
+"Real estate activities","Statistical Learning Theory",3
+"Real estate activities","Statistical Modelling of Spatial Data",1
+"Real estate activities","Systems for data science",1
+"Real estate activities","Time Series Analysis",1
+"Water supply, sewerage, waste management and remediation activities","A Network Tour of Data Science",1
+"Water supply, sewerage, waste management and remediation activities","Applied data analysis",5
+"Water supply, sewerage, waste management and remediation activities","Artificial Intelligence and Data Science",2
+"Water supply, sewerage, waste management and remediation activities","Bid Data Measuring Systems",2
+"Water supply, sewerage, waste management and remediation activities","Big Data",3
+"Water supply, sewerage, waste management and remediation activities","Big Data, Law, and Policy",1
+"Water supply, sewerage, waste management and remediation activities","Biomedical Informatics",1
+"Water supply, sewerage, waste management and remediation activities","Data Analysis and Integration",1
+"Water supply, sewerage, waste management and remediation activities","Data Analystics for Smart Grids",2
+"Water supply, sewerage, waste management and remediation activities","Data visualization",1
+"Water supply, sewerage, waste management and remediation activities","DD2437 Artificial Neural Networks and Deep Architectures",1
+"Water supply, sewerage, waste management and remediation activities","Information Retrieval",2
+"Water supply, sewerage, waste management and remediation activities","Lab in data science",3
+"Water supply, sewerage, waste management and remediation activities","Machine Learning",2
+"Water supply, sewerage, waste management and remediation activities","Machine Perception",2
+"Water supply, sewerage, waste management and remediation activities","System Security",1

@@ -1,0 +1,282 @@
+---
+title: "mutate_course_generator"
+output: html_document
+---
+
+In this document you will see how we set up the data to upload to a graph visualization, as well as prepare the code which will be the skeleton of the interactive interface (Shinyapp)
+
+# Loading data
+
+Now that we've scraped and linked reasearch articles for each of the 10 selected NACE sectors and linked them to their top 5 matches, we need to format our dataframe so that it is compatible with R's graph packages like gephi or networkd3. We also do some additionnal analytics.
+
+```{r setup, include=FALSE}
+library(tidyverse)
+data <- read.csv('Data/ai_courses_all_sectors_2.csv')
+```
+
+# Feature engineering
+
+## Number of AI courses linked to each sector
+
+This represents how many articles passed the two thresholds mentionned in the python notebook (score + nb of matches). It shows how much articles were indeed representative of AI breakthroughs.
+
+```{r}
+data <- data %>% 
+  group_by(Sector) %>% 
+  mutate(Matches_BySector = n())
+```
+
+## Number of matches per AI courses and average match per course per sector:
+
+We look at how many times one topic among all we've described was connected to a journal across all sectors. It shows how relevant the article is to AI.
+
+```{r}
+data <- data %>% 
+  group_by(Courses) %>% 
+  mutate(Matches_ByCourse = n()) %>% 
+  ungroup() %>% 
+  group_by(Courses) %>% 
+  mutate(Avg_score_ByCourse = mean(Score)) %>% 
+  ungroup()
+```
+
+## Number of matches per AI Course and Sector:
+
+This is the main feature we're interested in, it looks at how many times a same topic was linked to a single sector. This shows which topics in AI are indeed the most relevant to each setor individually. We also look at the average score per sector per topic. 
+
+```{r}
+data <- data %>% 
+  group_by(Courses,Sector) %>% 
+  mutate(Matches_BySector_ByCourse = n()) %>% 
+  arrange(desc(Matches_BySector_ByCourse,Sector)) %>% 
+  mutate(Avg_score_BySector_ByCourse = mean(Score)) %>% 
+  ungroup()
+```
+
+To get a better idea of what it represents, here is a stacked bar plot which shows in increasing order the matches per sector per topic across all topics and for all sectors. Each sector will have its own color and each x tick is a course. On the y axis is the total number of axis. This plot will be used in the shinyapp and made interactive to make it more granular and easy to play around with (isolate certain sectors, only above a certain nb of matches etc.)
+
+```{r fig.height=10, fig.width=20}
+data %>% 
+  group_by(Courses,Sector) %>% 
+  summarize(Matches_BySector_ByCourse = n()) %>% 
+  arrange(desc(Matches_BySector_ByCourse,Sector)) %>% 
+  ggplot() +
+  aes(x = reorder(Courses, Matches_BySector_ByCourse), y = Matches_BySector_ByCourse, fill = as.factor(Sector)) +
+  geom_col() +
+  theme_bw() +
+      theme(axis.text.x = element_text(angle = 45, hjust = 1))
+```
+
+```{r}
+data
+```
+
+# Graph formatting
+
+Below are several ways to construct the graph, both with igraph and networkD3. Although networkD3 was our ultimate choice, we can also pass from an igraph graph to networkD3 graph so we keep both methods to pass from one to the other.
+
+We can create a graph from a dataframe in both packages, for igraph, we simply choose 2 columns with each containing two nodes sharing a link should it be directed or not. In our case it would be AI topics in one column and NACE sectors in the other. We can also add other columns in the dataframe to be used as node or link properties for the graph visualization later on.
+
+```{r}
+library(networkD3)
+library(igraph)
+library(ndtv)
+
+# small cleaning
+data <- data %>% 
+  select(-X)
+
+# This represents the Matches per sector per topic, we re calculate it here just to confirm our wrangling
+edges <- data %>% 
+  group_by(Courses,Sector) %>% 
+  summarize(Matches = n()) 
+  
+# The data obtained above can be large, to make computations smooth we reduce it by filtering out matches falling below a certain number
+top_edges <- edges %>% 
+  filter(Matches > 10)
+
+# Then simply from the data frame we create the graph
+graph <- graph_from_data_frame(edges)
+head(graph)
+
+# First attempt at a graph visualization. igraph's viz tools are for fixed plots.
+plot(top_graph, vertex.shape="none", edge.arrow.size=.2, edge.color="orange",
+     vertex.color="orange", vertex.frame.color="#ffffff",
+     vertex.label=V(top_graph)$Sector, vertex.label.color="black",layout=layout.bypartite)
+
+# We try the same grap as above but this time indicating that links above are directed from columns1 (topics) to column 2. 
+top_graph <- graph_from_data_frame(top_edges, directed = TRUE)
+
+# And again we plot
+plot(top_graph,layout=layout.circle)
+
+# We can add certain propoerties to the graph directly computed by igraph. It computes for example the in-betweeness of the certain nodes given their links etc... We try them out below
+degAll <- degree(graph, v = V(graph), mode = "all")
+betAll <- betweenness(graph, v = V(graph), directed = FALSE) / (((vcount(graph) - 1) * (vcount(graph)-2)) / 2)
+betAll.norm <- (betAll - min(betAll))/(max(betAll) - min(betAll))
+dsAll <- similarity.dice(graph, vids = V(graph), mode = "all")
+graph <- set.vertex.attribute(graph, "degree", index = V(graph), value = degAll)
+graph <- set.vertex.attribute(graph, "betweenness", index = V(graph), value = betAll.norm)
+summary(graph)
+
+# Again another attempt at a graph
+edge.start <- get.edges(top_graph, 1:ecount(top_graph))[,1]
+edge.col <- V(top_graph)$color[edge.start]
+
+plot(top_graph, edge.color=edge.col, edge.curved=.1)  
+```
+
+## NetworkD3
+
+As mentionned before, we also have the package networkD3 which uses javascript animation (d3.js) to create nice interactive visualizations. 
+We can either create a networkD3 graph from a dataframe similarly to what was done in igraph, or it can be created from an igraph graph structure as below:
+
+```{r}
+graph2 <- igraph_to_networkD3(top_graph)
+
+
+forceNetwork(Links = graph2$links,
+             Nodes = graph2$nodes,
+             Source = 'source',
+             Target = 'target',
+             NodeID = 'name',
+             Group = 'name', 
+             linkDistance = 200,
+             linkWidth = 1,
+             linkColour = "#afafaf",
+             fontSize = 12,
+             zoom = T,
+             legend = T,
+             opacity = 0.8,
+             clickAction = T)
+```
+
+If it is to be done via a dataframe as before we hace to proceed in a slightly different manner. On one side we must create a dataframe with all the different nodes that we are considering (all different data points) and list them in a single column. In this dataframe we can add other columns which will contain node-only properties, anything related to the link it has with another node does not belong in that dataframe. Then we must create a link dataframe, which is exactly the same concept as the contruction of the dataframe to become a graph in igraph, namely that you have two columns where one row indicates a link between data points of the two columns. In that dataframe you may add properties of links, such as the matches by sector and courses in our case. 
+
+```{r}
+data <- read.csv('Data/ai_to_sectors_full.csv')
+
+test <- data %>% 
+  select(Sector,AI_topics,Courses,Score) %>% 
+  rename(Article = AI_topics,
+         Similarity = Score)
+
+write.csv(test, "google_w2v_results_prototype2.csv", row.names = FALSE)
+
+# We contruct the links dataframe, here the matches between AI topics and NACE sectors.
+links <- data %>% 
+  group_by(Sector,Courses) %>% 
+  summarize(Matches = n()) %>% 
+  rename(from = Sector,
+         to = Courses)
+
+
+# Contructing the node dataframe containing all the NACE sectors and AI topics.
+sectors <- data.frame(name = unique(links$from), group =  as.character(unique(links$from)))
+courses <- data.frame(name = unique(links$to), group = "Course")
+nodes <- sectors %>%
+  rbind(courses)
+  
+
+# To avoid having to go through this process again we record them in new csv files.
+# write.csv(nodes,'Data/nodes_1.csv',row.names = FALSE)
+# write.csv(links,'Data/links_1.csv',row.names = FALSE)
+```
+
+In fact when calling a networkD3 visualization, we don't need to convert the dataframe to a graph format. The package automatically does it as long as we specifically construct our node and link dataframes as is needed. For a visualization:
+
+```{r}
+edgeList <- read.csv('Data/links_1.csv')
+nodeList <- read.csv('Data/nodes_1.csv')
+
+# The graph can be big so to make it more human-readable we filter it as was done above.
+filtered_edgeList <- edgeList %>% 
+  filter(Matches >= 5) %>% 
+  filter(from %in% "Accomodation and food service activities")
+
+# We must then adapt the nodelist to correspond exactly to the information contained in the node list.
+filtered_nodeList <- nodeList %>% 
+  filter(name %in% filtered_edgeList$from | name %in% filtered_edgeList$to)
+
+# We then create indices for the graph to understand the links we've considered (they start at 0 since a javascript module is used)
+filtered_edgeList <- filtered_edgeList %>% 
+  mutate(from.index = match(filtered_edgeList$from,
+                            filtered_nodeList$name)-1) %>% 
+  mutate(to.index = match(filtered_edgeList$to,
+                          filtered_nodeList$name)-1)
+
+# We add a clickscript to make the interaction more fun!
+MyClickScript <- 'd3.select(this).select("circle").transition().duration(750).attr("r", 40)'
+
+# And finally we plot:
+forceNetwork(Links = filtered_edgeList,
+             Nodes = filtered_nodeList,
+             Source = "from.index",
+             Target = "to.index",
+             Value = "Matches",
+             NodeID = "name",
+             #Nodesize = "group",
+             Group = "group",
+             linkDistance = 200,
+             fontSize = 20,
+             opacity = 0.8,
+             zoom = TRUE,
+             linkColour = "#afafaf",
+             linkWidth = networkD3::JS("function(d) { return d.value/5; }"),
+             legend = T,
+             clickAction = MyClickScript)
+```
+
+We will use the above graph for the shinyapp as well. 
+
+
+
+```{r}
+data <- read.csv('Data/google_w2v_results_prototype2.csv')
+levels(as.factor(data$Courses))
+
+data <- data %>% 
+  mutate(Courses = case_when(Courses == "DD2423 Image Analysis and Computer Vision" ~ "Image Analysis and Computer Vision",
+                             Courses == "DD2425 Robotics and Autonomous Systems" ~ "Robotics and Autonomous Systems",
+                             Courses == "OPERATIONS RESEARCH" ~ "Operations Research",
+                             Courses == "Statistical Methods in Data Mining" ~ "Data Mining",
+                             Courses == "A Network Tour of Data Science" ~ "Topics in Networks and Distributed Systems",
+                             Courses == "Advanced Machine Learning" ~ "Machine Learning",
+                             Courses == "Advanced topics on privacy enhancing technologies" ~ "Privacy Enhancing Technologies",
+                             Courses == "Cloud Computing and Virtualization" ~ "Big Data",
+                             Courses == "DD2424 Deep Learning in Data Science" ~ "Deep Learning",
+                             Courses == "DD2437 Artificial Neural Networks and Deep Architectures" ~ "Artificial Neural Networks",
+                             Courses == "Deep Learning " ~ "Deep Learning",
+                             Courses == "Distributed information systems" ~ "Database Systems",
+                             Courses == "Energy-Efficient Parallel Computing Systems for Data Analytics" ~ "Big Data",
+                             Courses == "How To Write Fast Numerical Code" ~ "Programming Paradigms",
+                             Courses == "Information security and privacy" ~ "Computer and network security",
+                             Courses == "Introduction to natural language processing" ~ "Natural Language Processing",
+                             Courses == "Lab in data science" ~ "Data Science",
+                             Courses == "Machine learning" ~ "Machine Learning",
+                             Courses == "Mathematical foundations of signal processing" ~ "Signal Processing",
+                             Courses == "Model Driven Engineering" ~ "Machine Learning",
+                             Courses == "Natural Language" ~ "Natural Language Processing",
+                             Courses == "Network Science" ~ "Artificial Neural Networks",
+                             Courses == "Principles of Distributed Computing" ~ "Big Data",
+                             Courses == "Program Analysis for System Security and Reliability" ~ "Computer and network security",
+                             Courses == "System Security" ~ "Computer and network security",
+                             TRUE ~as.character(Courses)))
+
+levels(as.factor(data$Courses))
+
+```
+
+
+
+
+
+
+
+
+
+
+
+
+
+
