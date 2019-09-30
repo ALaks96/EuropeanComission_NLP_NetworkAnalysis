@@ -10,4 +10,5 @@ The project involved WebScrapping, NLP and Graph Theory.
 You can reach both PoCs at the following public URLs (connect to a wifi without a firewall):
 
 **PoC1** : http://34.245.7.232:3838/myapp/poc1/prototype1/
+
 **PoC2** : http://34.245.7.232:3838/myapp/poc2/prototype2/
