@@ -1,0 +1,4 @@
+* linguist-vendored
+*.ipynb linguist-vendored=false
+*.Rmd linguist-vendored=false
+*.R linguist-vendored=false
