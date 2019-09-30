@@ -5,7 +5,7 @@ This project was led during my internship at PwC in collaboration with DG EAC an
 Their end goal was to use data and machine learning to get insights on education in Europe to help Policy Officers in their decision making.
 In this context we developed two PoCs (delivered as ShinyApps) which were deployed on the Commissions' severs. 
 
-The project involved WebScrapping, NLP and Graph Theory. 
+The project involved WebScrapping, NLP and Graph Theory developed in Python, R, Pyspark, JavaScript and for graph data extraction purposes Apache Jena and OpenRefine (visualized in GraphDB). 
 
 You can reach both PoCs at the following public URLs (connect to a wifi without a firewall):
 
