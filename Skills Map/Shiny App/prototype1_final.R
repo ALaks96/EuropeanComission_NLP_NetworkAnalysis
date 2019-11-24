@@ -9,12 +9,12 @@ library(networkD3)
 library(feather)
 library(DT)
 
-data <- read_feather('NLP_results_prototype1/google_w2v_results_prototype1_v3.feather')
-don <- read.csv('NLP_results_prototype1/occupations_full.csv')
+data <- read_feather('google_w2v_results_prototype1_v3.feather')
+don <- read.csv('occupations_full.csv')
 don <- don %>% 
   rename(Skills = Skill)
 
-full_data <- read_feather('NLP_results_prototype1/google_w2v_results_prototype1_full_v3.feather')
+full_data <- read_feather('google_w2v_results_prototype1_full_v3.feather')
 full_data_tbl <- full_data
 
 # List of all the education programs from our data on four Belgian universities:
