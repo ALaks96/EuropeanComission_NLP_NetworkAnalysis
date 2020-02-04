@@ -5,4 +5,5 @@
 *.ipynb linguist-detectable=false
 *.Rmd linguist-detectable=false
 *.R linguist-detectable=false
+*.Rproj linguist-detectable=false
 *.py linguist-detectable=true
