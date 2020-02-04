@@ -1,4 +1,6 @@
-* linguist-vendored
-*.ipynb linguist-vendored=false
-*.Rmd linguist-vendored=false
-*.R linguist-vendored=false
+*.sh linguist-detectable=true
+*.txt linguist-detectable=false
+*.rtf linguist-detectable=false
+*.md linguist-detectable=false
+*.ipynb linguist-detectable=false
+*.py linguist-detectable=true
